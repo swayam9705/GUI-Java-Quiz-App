@@ -25,8 +25,8 @@ public class Questions extends Frame {
         {"Elephant", "Blue Whale", "Giraffe", "Hippopotamus"},
         {"J. K. Rowling", "Stephen King", "Dan Brown", "George Orwell"},
         {"Au", "Ag", "Fe", "Cu"},
-        {"Atlantic", "Pacific", "Indian", "Arctic"},
         {"Argentina", "France", "Brazil", "Germany"},
+        {"Atlantic", "Pacific", "Indian", "Arctic"},
         {"Lion", "Tiger", "Elephant", "Gorilla"},
         {"William Shakespeare", "Jane Austen", "Charles Dickens", "Mark Twain"}
     };
@@ -36,7 +36,7 @@ public class Questions extends Frame {
         "Leonardo da Vinci",
         "Mars",
         "Blue Whale",
-        "J.K. Rowling",
+        "J. K. Rowling",
         "Au",
         "Argentina",
         "Pacific",
@@ -44,7 +44,7 @@ public class Questions extends Frame {
         "William Shakespeare"
     };
 
-    String[] usersAnswers;
+    String[] usersAnswers = new String[answers.length];
 
     int questionIndex = 0;
 
@@ -96,15 +96,19 @@ public class Questions extends Frame {
 
         ////////////////////////
         op1 = new JRadioButton(options[questionIndex][0]);
+        op1.setSelected(false);
         this.styleOptionButton(op1);
 
         op2 = new JRadioButton(options[questionIndex][1]);
+        op2.setSelected(false);
         this.styleOptionButton(op2);
 
         op3 = new JRadioButton(options[questionIndex][1]);
+        op3.setSelected(false);
         this.styleOptionButton(op3);
 
         op4 = new JRadioButton(options[questionIndex][2]);
+        op4.setSelected(false);
         this.styleOptionButton(op4);
 
         optionsContainer.add(op1);
@@ -147,6 +151,13 @@ public class Questions extends Frame {
         submit.setBounds((Var.QUE_CONTAINER_WIDTH - Var.SUBMIT_BUTTON_WIDTH) / 2, (Var.QUE_HEIGHT + Var.OPTION_CONTAINER_HEIGHT + Var.SUBMIT_BUTTON_HEIGHT + 50), Var.SUBMIT_BUTTON_WIDTH, Var.SUBMIT_BUTTON_HEIGHT);
         submit.setEnabled(false);
         container.add(submit);
+
+        submit.addActionListener(e -> {
+            System.out.println(scores());
+            this.dispose();
+            new QuizOver(scores());
+        });
+
     }
 
 
@@ -160,38 +171,7 @@ public class Questions extends Frame {
         radioGroup.add(btn);
     }
 
-    public void displayNext() {
-
-        if (questionIndex < questions.length - 1) {
-
-            if (op1.isSelected()) {
-                usersAnswers[questionIndex] = op1.getText();
-            }
-            else if (op2.isSelected()) {
-                usersAnswers[questionIndex] = op2.getText();
-            }
-            else if (op2.isSelected()) {
-                usersAnswers[questionIndex] = op3.getText();
-            }
-            else if (op3.isSelected()) {
-                usersAnswers[questionIndex] = op4.getText();
-            }
-
-            questionIndex++;
-            question.setText("Q" + (questionIndex + (int)1) + ". " + questions[questionIndex]);
-            op1.setText(options[questionIndex][0]);
-            op2.setText(options[questionIndex][1]);
-            op3.setText(options[questionIndex][2]);
-            op4.setText(options[questionIndex][3]);
-            prev.setEnabled(true);
-
-            if (questionIndex == questions.length - 1) {
-                next.setEnabled(false);
-                submit.setEnabled(true);
-            }
-        }
-    }
-
+    
     public void displayPrev() {
         if (questionIndex > 0) {
             questionIndex--;
@@ -205,7 +185,87 @@ public class Questions extends Frame {
             if (questionIndex == 0) {
                 prev.setEnabled(false);
             }
+            
+            
+            if (usersAnswers[questionIndex] != null) {
+                
+                if (usersAnswers[questionIndex].equals(options[questionIndex][0])) {
+                    op1.setSelected(true);
+                }
+                else if (usersAnswers[questionIndex].equals(options[questionIndex][1])) {
+                    op2.setSelected(true);
+                }
+                else if (usersAnswers[questionIndex].equals(options[questionIndex][2])) {
+                    op3.setSelected(true);
+                }
+                else if (usersAnswers[questionIndex].equals(options[questionIndex][3])) {
+                    op4.setSelected(true);
+                }
+            }
         }
+    }
+    public void displayNext() {
+    
+        if (questionIndex < questions.length) {
+    
+            if (op1.isSelected()) {
+                usersAnswers[questionIndex] = op1.getText();
+            }
+            else if (op2.isSelected()) {
+                usersAnswers[questionIndex] = op2.getText();
+            }
+            else if (op2.isSelected()) {
+                usersAnswers[questionIndex] = op3.getText();
+            }
+            else if (op3.isSelected()) {
+                usersAnswers[questionIndex] = op4.getText();
+            }
+    
+            questionIndex++;
+
+            if (questionIndex < questions.length) {
+
+                question.setText("Q" + (questionIndex + (int)1) + ". " + questions[questionIndex]);
+                op1.setText(options[questionIndex][0]);
+                op2.setText(options[questionIndex][1]);
+                op3.setText(options[questionIndex][2]);
+                op4.setText(options[questionIndex][3]);
+
+
+                prev.setEnabled(true);
+            }
+
+            // if (usersAnswers[questionIndex] != null) {
+            //     if (usersAnswers[questionIndex].equals(op1.getText())) {
+            //         op1.setSelected(true);
+            //     }
+            //     else if (usersAnswers[questionIndex].equals(op2.getText())) {
+            //         op2.setSelected(true);
+            //     }
+            //     else if (usersAnswers[questionIndex].equals(op3.getText())) {
+            //         op3.setSelected(true);
+            //     }
+            //     else if (usersAnswers[questionIndex].equals(op4.getText())) {
+            //         op4.setSelected(true);
+            //     }
+            // }
+    
+            if (questionIndex == questions.length - 1) {
+                // next.setEnabled(false);
+                submit.setEnabled(true);
+            }
+        }
+    }
+
+    public int scores() {
+        int count = 0;
+        for (int i = 0; i < answers.length; i++) {
+            if (usersAnswers[i] != null && usersAnswers[i].equals(answers[i])) {
+                count++;
+                System.out.println(usersAnswers[i]);
+            }
+        }
+        return count;
     }
 }
 

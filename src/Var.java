@@ -21,4 +21,5 @@ public class Var {
 
     public static final int SUBMIT_BUTTON_WIDTH = 200;
     public static final int SUBMIT_BUTTON_HEIGHT = 40;
+
 }
